@@ -1,0 +1,22 @@
+from selenium.webdriver import Firefox, FirefoxOptions
+
+
+def _make_firefox_options():
+    firefox_options = FirefoxOptions()
+    firefox_options.log.level = "fatal"
+    return firefox_options
+
+
+class Config(object):
+    # web driver [Firefox]
+    WEB_DRIVER = Firefox
+    WEB_DRIVER_ARGS = {
+        # "firefox_binary": "C:\\Users\\yichengchen\\AppData\\Local\\Mozilla Firefox\\firefox.exe",
+        "options": _make_firefox_options(),
+    }
+
+    # costco
+    COCST_ARRIVAL_NOTICING_URLS = [
+        "https://www.costco.com.tw/Electronics/Cell-Phones-Portable-Wifi-Sim-Accessories/Cell-Phones/iPhone-12-Pro-512GB-Graphite/p/129950",
+        "https://www.costco.com.tw/Electronics/Cell-Phones-Portable-Wifi-Sim-Accessories/Cell-Phones/iPhone-12-128GB/p/129940-B",
+    ]
