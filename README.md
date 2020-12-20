@@ -1,6 +1,6 @@
-# poetry_template
+# selenium_tools
 
-###### tags: `poetry_template`
+###### tags: `selenium_tools`
 
 ## installation
 
@@ -15,7 +15,7 @@
   curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
   ```
 
-### 2. poetry_template
+### 2. selenium_tools
 
 - install `.venv`
   - Development

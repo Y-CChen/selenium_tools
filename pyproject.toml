@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "poetry_template"
+name = "selenium_tools"
 version = "0.1.0"
 description = ""
 authors = []
