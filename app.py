@@ -15,7 +15,7 @@ def _main():
         logger.addHandler(RichHandler(rich_tracebacks=True))
         with make_web_driver(Config.WEB_DRIVER, Config.WEB_DRIVER_ARGS) as web_driver:
             if hasattr(Config, "COCST_ARRIVAL_NOTICING_URLS"):
-                costco.arrival_noticing(web_driver, Config.COCST_ARRIVAL_NOTICING_URLS)
+                costco.arrival_noticing(Config.LINE_NOTIFY_ACCESS_TOKEN, web_driver, Config.COCST_ARRIVAL_NOTICING_URLS)
     except Exception as e:
         logging.exception(e)
 

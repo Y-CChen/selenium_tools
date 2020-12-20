@@ -15,6 +15,9 @@ class Config(object):
         "options": _make_firefox_options(),
     }
 
+    # line notify
+    LINE_NOTIFY_ACCESS_TOKEN = "[line notify access token]"
+
     # costco
     COCST_ARRIVAL_NOTICING_URLS = [
         "https://www.costco.com.tw/Electronics/Cell-Phones-Portable-Wifi-Sim-Accessories/Cell-Phones/iPhone-12-Pro-512GB-Graphite/p/129950",

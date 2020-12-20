@@ -8,6 +8,7 @@ authors = []
 python = "^3.6"
 rich = "^9.2.0"
 selenium = "^3.141.0"
+requests = "^2.25.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

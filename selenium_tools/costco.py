@@ -4,8 +4,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import WebDriverWait
 
+from .line_notify import line_notify
 
-def arrival_noticing(web_driver, urls):
+
+def arrival_noticing(line_notify_access_token, web_driver, urls):
     products = dict()
     web_driver_wait = WebDriverWait(web_driver, 60)
     for url in urls:
@@ -19,7 +21,22 @@ def arrival_noticing(web_driver, urls):
         )
         in_stock = (not bool(buy_now_button.get_attribute("disabled"))) if buy_now_button else False
         products[product_name] = in_stock
-    logging.debug(products)
+    need_notify = False
+    messages = list()
+    for product_name, in_stock in products.items():
+        need_notify = need_notify or in_stock
+        messages.append(
+            "{:>16}: {}".format(
+                {
+                    True: "🟢 in stock",
+                    False: "🔴 out of stock",
+                }[in_stock],
+                product_name,
+            )
+        )
+    logging.debug(messages)
+    if need_notify:
+        line_notify("\n".join(messages), line_notify_access_token)
 
 
 def _wait_until_visibility_of_element_located(web_driver_wait, locator):
