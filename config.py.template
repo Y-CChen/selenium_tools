@@ -36,3 +36,29 @@ class Config(object):
         "https://www.costco.com.tw/Electronics/Cell-Phones-Portable-Wifi-Sim-Accessories/Cell-Phones/iPhone-12-Pro-512GB-Graphite/p/129950",
         "https://www.costco.com.tw/Electronics/Cell-Phones-Portable-Wifi-Sim-Accessories/Cell-Phones/iPhone-12-128GB/p/129940-B",
     ]
+
+    # youtube streaming
+    YOUTUBE_STREAMING_LIST = [
+        # ("TWICE Like OOH AHH MV", 'TWICE "Like OOH-AHH(OOH-AHH하게)" M/V', "04:32"),
+        # ("TWICE CHEER UP MV", 'TWICE "CHEER UP" M/V', "04:01"),
+        # ("TWICE TT MV", 'TWICE "TT" M/V', "04:14"),
+        # ("TWICE KNOCK KNOCK MV", 'TWICE "KNOCK KNOCK" M/V', "04:01"),
+        # ("TWICE SIGNAL MV", 'TWICE "SIGNAL" M/V', "04:19"),
+        # ("TWICE LIKEY MV", 'TWICE "LIKEY" M/V', "03:42"),
+        # ("TWICE Heart Shaker MV", 'TWICE "Heart Shaker" M/V', "03:13"),
+        # ("TWICE What is Love MV", 'TWICE "What is Love?" M/V', "03:44"),
+        # ("TWICE Dance The Night Away MV", 'TWICE "Dance The Night Away" M/V', "04:09"),
+        # ("TWICE YES or YES MV", 'TWICE "YES or YES" M/V', "04:29"),
+        # (
+        #     "TWICE The Best Thing I Ever Did MV",
+        #     'TWICE "The Best Thing I Ever Did(올해 제일 잘한 일)" M/V',
+        #     "03:34",
+        # ),
+        # ("TWICE FANCY MV", 'TWICE "FANCY" M/V', "03:39"),
+        # ("TWICE Feel Special MV", 'TWICE "Feel Special" M/V', "03:41"),
+        # ("TWICE MORE & MORE MV", 'TWICE "MORE & MORE" M/V', "04:01"),
+        # ("TWICE I CAN'T STOP ME MV", 'TWICE "I CAN\'T STOP ME" M/V', "03:41"),
+        # ("TWICE CRY FOR ME Choreography 2", "TWICE 'CRY FOR ME' Choreography - 2", "03:30"),
+        # ("TWICE Alcohol Free MV", 'TWICE "Alcohol-Free" M/V', "03:34"),
+        ("TWICE The Feels MV", 'TWICE "The Feels" M/V', "03:52"),
+    ]
