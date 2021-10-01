@@ -1,19 +1,32 @@
 from selenium.webdriver import Firefox, FirefoxOptions
+from selenium.webdriver import Chrome, ChromeOptions
 
 
 def _make_firefox_options():
     firefox_options = FirefoxOptions()
+    # firefox_options.binary_location = "/Applications/Firefox.app/Contents/MacOS/firefox"
     firefox_options.log.level = "fatal"
     return firefox_options
 
 
+def _make_chrome_options():
+    chrome_options = ChromeOptions()
+    # chrome_options.binary_location = "/Applications/Chromium.app/Contents/MacOS/Chromium"
+    return chrome_options
+
+
 class Config(object):
-    # web driver [Firefox]
+    # web driver
+    # [Firefox]
     WEB_DRIVER = Firefox
     WEB_DRIVER_ARGS = {
-        # "firefox_binary": "C:\\Users\\yichengchen\\AppData\\Local\\Mozilla Firefox\\firefox.exe",
         "options": _make_firefox_options(),
     }
+    # [Chrome]
+    # WEB_DRIVER = Chrome
+    # WEB_DRIVER_ARGS = {
+    #     "options": _make_chrome_options(),
+    # }
 
     # line notify
     LINE_NOTIFY_ACCESS_TOKEN = "[line notify access token]"
