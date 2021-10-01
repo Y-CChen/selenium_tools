@@ -19,7 +19,7 @@ class Config(object):
     LINE_NOTIFY_ACCESS_TOKEN = "[line notify access token]"
 
     # costco
-    COCST_ARRIVAL_NOTICING_URLS = [
+    COSTCO_ARRIVAL_NOTICING_URLS = [
         "https://www.costco.com.tw/Electronics/Cell-Phones-Portable-Wifi-Sim-Accessories/Cell-Phones/iPhone-12-Pro-512GB-Graphite/p/129950",
         "https://www.costco.com.tw/Electronics/Cell-Phones-Portable-Wifi-Sim-Accessories/Cell-Phones/iPhone-12-128GB/p/129940-B",
     ]

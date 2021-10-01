@@ -19,7 +19,7 @@ def _main():
 
         # scheduler
         scheduler = BackgroundScheduler()
-        if hasattr(Config, "COCST_ARRIVAL_NOTICING_URLS"):
+        if hasattr(Config, "COSTCO_ARRIVAL_NOTICING_URLS"):
             _job_costco_arrival_noticing(True)
             scheduler.add_job(func=lambda: _job_costco_arrival_noticing(False), trigger="cron", minute="*/10")
         scheduler.start()
@@ -48,7 +48,7 @@ def _parse_args(args=None):
 def _job_costco_arrival_noticing(force_notify):
     with make_web_driver(Config.WEB_DRIVER, Config.WEB_DRIVER_ARGS) as web_driver:
         costco.arrival_noticing(
-            Config.LINE_NOTIFY_ACCESS_TOKEN, web_driver, Config.COCST_ARRIVAL_NOTICING_URLS, force_notify
+            Config.LINE_NOTIFY_ACCESS_TOKEN, web_driver, Config.COSTCO_ARRIVAL_NOTICING_URLS, force_notify
         )
 
 
