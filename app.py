@@ -9,7 +9,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from rich.logging import RichHandler
 
 from config import Config
-from selenium_tools import costco, make_web_driver, youtube
+from selenium_tools import costco, line_notify, make_web_driver, youtube
 
 
 def _main():
@@ -28,12 +28,27 @@ def _main():
             )
         if hasattr(Config, "YOUTUBE_STREAMING_LIST"):
             job_id = "_job_youtube_streaming"
+            streaming_count = 0
+
+            def _add_job_youtube_streaming_listener(event):
+                nonlocal streaming_count
+                if event.job_id == job_id:
+                    if not event.exception:
+                        streaming_count += 1
+                    _add_job_youtube_streaming(scheduler, job_id)
+
             _add_job_youtube_streaming(scheduler, job_id)
             scheduler.add_listener(
-                lambda event: _add_job_youtube_streaming(scheduler, job_id)
-                if event.job_id == job_id
-                else None,
+                _add_job_youtube_streaming_listener,
                 events.EVENT_JOB_EXECUTED | events.EVENT_JOB_ERROR,
+            )
+            scheduler.add_job(
+                func=lambda: line_notify.line_notify(
+                    "youtube streaming {} times".format(streaming_count),
+                    Config.LINE_NOTIFY_ACCESS_TOKEN,
+                ),
+                trigger="cron",
+                hour="1",
             )
         scheduler.start()
         atexit.register(lambda: scheduler.shutdown())
