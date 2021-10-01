@@ -1,13 +1,15 @@
 import argparse
 import atexit
 import logging
+import random
 import time
 
+from apscheduler import events
 from apscheduler.schedulers.background import BackgroundScheduler
 from rich.logging import RichHandler
 
 from config import Config
-from selenium_tools import costco, make_web_driver
+from selenium_tools import costco, make_web_driver, youtube
 
 
 def _main():
@@ -21,7 +23,18 @@ def _main():
         scheduler = BackgroundScheduler()
         if hasattr(Config, "COSTCO_ARRIVAL_NOTICING_URLS"):
             _job_costco_arrival_noticing(True)
-            scheduler.add_job(func=lambda: _job_costco_arrival_noticing(False), trigger="cron", minute="*/10")
+            scheduler.add_job(
+                func=lambda: _job_costco_arrival_noticing(False), trigger="cron", minute="*/10"
+            )
+        if hasattr(Config, "YOUTUBE_STREAMING_LIST"):
+            job_id = "_job_youtube_streaming"
+            _add_job_youtube_streaming(scheduler, job_id)
+            scheduler.add_listener(
+                lambda event: _add_job_youtube_streaming(scheduler, job_id)
+                if event.job_id == job_id
+                else None,
+                events.EVENT_JOB_EXECUTED | events.EVENT_JOB_ERROR,
+            )
         scheduler.start()
         atexit.register(lambda: scheduler.shutdown())
 
@@ -48,8 +61,21 @@ def _parse_args(args=None):
 def _job_costco_arrival_noticing(force_notify):
     with make_web_driver(Config.WEB_DRIVER, Config.WEB_DRIVER_ARGS) as web_driver:
         costco.arrival_noticing(
-            Config.LINE_NOTIFY_ACCESS_TOKEN, web_driver, Config.COSTCO_ARRIVAL_NOTICING_URLS, force_notify
+            Config.LINE_NOTIFY_ACCESS_TOKEN,
+            web_driver,
+            Config.COSTCO_ARRIVAL_NOTICING_URLS,
+            force_notify,
         )
+
+
+def _job_youtube_streaming():
+    with make_web_driver(Config.WEB_DRIVER, Config.WEB_DRIVER_ARGS) as web_driver:
+        youtube.streaming(web_driver, Config.YOUTUBE_STREAMING_LIST)
+
+
+def _add_job_youtube_streaming(scheduler, job_id):
+    time.sleep(random.randrange(5, 20) / 10)
+    scheduler.add_job(func=_job_youtube_streaming, id=job_id)
 
 
 if __name__ == "__main__":
