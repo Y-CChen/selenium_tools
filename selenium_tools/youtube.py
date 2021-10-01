@@ -29,6 +29,7 @@ def _search_and_play(web_driver, web_driver_wait, search_text, link_text, defaul
     el = _find_element(
         web_driver, web_driver_wait, By.XPATH, '//input[@id="search" or @id="masthead-search-term"]'
     )
+    el.click()
     el.clear()
     el.send_keys(search_text + Keys.RETURN)
     _random_sleep()
