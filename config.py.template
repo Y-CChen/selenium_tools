@@ -60,5 +60,6 @@ class Config(object):
         # ("TWICE I CAN'T STOP ME MV", 'TWICE "I CAN\'T STOP ME" M/V', "03:41"),
         # ("TWICE CRY FOR ME Choreography 2", "TWICE 'CRY FOR ME' Choreography - 2", "03:30"),
         # ("TWICE Alcohol Free MV", 'TWICE "Alcohol-Free" M/V', "03:34"),
-        ("TWICE The Feels MV", 'TWICE "The Feels" M/V', "03:52"),
+        # ("TWICE The Feels MV", 'TWICE "The Feels" M/V', "03:52"),
+        ("TWICE SCIENTIST MV", 'TWICE “SCIENTIST” M/V', "03:21"),
     ]
