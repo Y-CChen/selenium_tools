@@ -1,4 +1,4 @@
-from selenium.webdriver import Firefox, FirefoxOptions
+from selenium.webdriver import Firefox, FirefoxOptions, FirefoxProfile
 from selenium.webdriver import Chrome, ChromeOptions
 
 
@@ -6,12 +6,15 @@ def _make_firefox_options():
     firefox_options = FirefoxOptions()
     # firefox_options.binary_location = "/Applications/Firefox.app/Contents/MacOS/firefox"
     firefox_options.log.level = "fatal"
+    firefox_options.profile = FirefoxProfile()
+    firefox_options.profile.set_preference("media.volume_scale", "0.0")
     return firefox_options
 
 
 def _make_chrome_options():
     chrome_options = ChromeOptions()
     # chrome_options.binary_location = "/Applications/Chromium.app/Contents/MacOS/Chromium"
+    chrome_options.add_argument("--mute-audio")
     return chrome_options
 
 
@@ -19,12 +22,12 @@ class Config(object):
     # web driver
     # [Firefox]
     WEB_DRIVER = Firefox
-    WEB_DRIVER_ARGS = {
+    WEB_DRIVER_ARGS = lambda: {
         "options": _make_firefox_options(),
     }
     # [Chrome]
     # WEB_DRIVER = Chrome
-    # WEB_DRIVER_ARGS = {
+    # WEB_DRIVER_ARGS = lambda: {
     #     "options": _make_chrome_options(),
     # }
 
@@ -61,5 +64,5 @@ class Config(object):
         # ("TWICE CRY FOR ME Choreography 2", "TWICE 'CRY FOR ME' Choreography - 2", "03:30"),
         # ("TWICE Alcohol Free MV", 'TWICE "Alcohol-Free" M/V', "03:34"),
         # ("TWICE The Feels MV", 'TWICE "The Feels" M/V', "03:52"),
-        ("TWICE SCIENTIST MV", 'TWICE “SCIENTIST” M/V', "03:21"),
+        ("TWICE SCIENTIST MV", "TWICE “SCIENTIST” M/V", "03:21"),
     ]

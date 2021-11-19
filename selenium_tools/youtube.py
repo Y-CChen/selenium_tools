@@ -108,6 +108,7 @@ def streaming(web_driver, streaming_list):
     web_driver.get("https://www.youtube.com/")
     random.shuffle(streaming_list)
     logging.info("search and play")
+    web_driver.maximize_window()
     for streaming_item in streaming_list:
         _search_and_play(web_driver, web_driver_wait, *streaming_item)
     logging.info("clear history")

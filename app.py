@@ -74,7 +74,7 @@ def _parse_args(args=None):
 
 
 def _job_costco_arrival_noticing(force_notify):
-    with make_web_driver(Config.WEB_DRIVER, Config.WEB_DRIVER_ARGS) as web_driver:
+    with make_web_driver(Config.WEB_DRIVER, Config.WEB_DRIVER_ARGS()) as web_driver:
         costco.arrival_noticing(
             Config.LINE_NOTIFY_ACCESS_TOKEN,
             web_driver,
@@ -84,7 +84,7 @@ def _job_costco_arrival_noticing(force_notify):
 
 
 def _job_youtube_streaming():
-    with make_web_driver(Config.WEB_DRIVER, Config.WEB_DRIVER_ARGS) as web_driver:
+    with make_web_driver(Config.WEB_DRIVER, Config.WEB_DRIVER_ARGS()) as web_driver:
         youtube.streaming(web_driver, Config.YOUTUBE_STREAMING_LIST)
 
 
