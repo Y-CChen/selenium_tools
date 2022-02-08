@@ -1,0 +1,12 @@
+[Unit]
+Description=selenium_tools
+After=multi-user.target
+
+[Service]
+Type=idle
+WorkingDirectory=/home/pi/selenium_tools
+ExecStart=/home/pi/selenium_tools/.venv/bin/python app.py
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

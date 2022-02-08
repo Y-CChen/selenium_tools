@@ -2,9 +2,13 @@
 function install_service() {
     local SERVICE_DIR="$(dirname ${1})"
     local SERVICE_FILE="$(basename ${1})"
-    sudo cp {${SERVICE_DIR},/lib/systemd/system}/${SERVICE_FILE}
-    sudo chmod 644 /lib/systemd/system/${SERVICE_FILE}
+    local SYSTEMD_DIR=~/.config/systemd/user
+    mkdir -p ${SYSTEMD_DIR}
+    cp {${SERVICE_DIR},${SYSTEMD_DIR}}/${SERVICE_FILE}
+    chmod 644 ${SYSTEMD_DIR}/${SERVICE_FILE}
+    systemctl --user enable ${SERVICE_FILE}
     sudo systemctl daemon-reload
+    systemctl --user start ${SERVICE_FILE}
 }
 
 if [ "$1" == "" ] || [ $# -gt 1 ]; then

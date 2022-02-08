@@ -130,6 +130,7 @@ dmypy.json
 
 # config
 config.py
+selenium_tools.service
 
 # web driver
 geckodriver.exe
