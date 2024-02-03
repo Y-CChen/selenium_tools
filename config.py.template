@@ -6,14 +6,18 @@ def _make_firefox_options():
     firefox_options = FirefoxOptions()
     # firefox_options.binary_location = "/Applications/Firefox.app/Contents/MacOS/firefox"
     firefox_options.log.level = "fatal"
-    firefox_options.profile = FirefoxProfile()
-    firefox_options.profile.set_preference("media.volume_scale", "0.0")
+    # firefox_options.add_argument("-headless")
+    firefox_options.add_argument("-private")
+    firefox_profile = FirefoxProfile()
+    firefox_profile.set_preference("media.volume_scale", "0.0")
+    firefox_options.profile = firefox_profile
     return firefox_options
 
 
 def _make_chrome_options():
     chrome_options = ChromeOptions()
     # chrome_options.binary_location = "/Applications/Chromium.app/Contents/MacOS/Chromium"
+    chrome_options.add_argument("--incognito")
     chrome_options.add_argument("--mute-audio")
     return chrome_options
 
@@ -64,5 +68,9 @@ class Config(object):
         # ("TWICE CRY FOR ME Choreography 2", "TWICE 'CRY FOR ME' Choreography - 2", "03:30"),
         # ("TWICE Alcohol Free MV", 'TWICE "Alcohol-Free" M/V', "03:34"),
         # ("TWICE The Feels MV", 'TWICE "The Feels" M/V', "03:52"),
-        ("TWICE SCIENTIST MV", "TWICE “SCIENTIST” M/V", "03:21"),
+        # ("TWICE SCIENTIST MV", "TWICE “SCIENTIST” M/V", "03:21"),
+        # ("TWICE Talk that Talk MV", 'TWICE "Talk that Talk" M/V', "02:55"),
+        # ("TWICE MOONLIGHT SUNRISE MV", 'TWICE Pre-release english track "MOONLIGHT SUNRISE" M/V', "03:24"),
+        # ("TWICE SET ME FREE MV", 'TWICE "SET ME FREE" M/V', "03:32"),
+        ("TWICE I GOT YOU MV", 'TWICE "I GOT YOU" M/V', "03:53"),
     ]
