@@ -23,26 +23,35 @@ def _main():
 
         # scheduler
         scheduler = BackgroundScheduler()
-        if hasattr(Config, "COSTCO_ARRIVAL_NOTICING_URLS"):
-            _job_costco_arrival_noticing(True)
+        costco_arrival_noticing_urls = getattr(
+            Config, "COSTCO_ARRIVAL_NOTICING_URLS", None
+        )
+        if costco_arrival_noticing_urls is not None:
+            _job_costco_arrival_noticing(
+                costco_arrival_noticing_urls, force_notify=True
+            )
             scheduler.add_job(
-                func=lambda: _job_costco_arrival_noticing(False),
+                func=lambda: _job_costco_arrival_noticing(
+                    costco_arrival_noticing_urls, force_notify=False
+                ),
                 trigger="cron",
                 minute="*/10",
             )
-        if hasattr(Config, "YOUTUBE_STREAMING_LIST"):
+        youtube_streaming_list = getattr(Config, "YOUTUBE_STREAMING_LIST", None)
+        if youtube_streaming_list is not None:
             job_id = "_job_youtube_streaming"
             streaming_count = 0
 
             def _add_job_youtube_streaming_listener(event):
-                nonlocal scheduler
                 nonlocal streaming_count
                 if event.job_id == job_id:
                     if not event.exception:
                         streaming_count += 1
-                    _add_job_youtube_streaming(scheduler, job_id)
+                    _add_job_youtube_streaming(
+                        scheduler, job_id, youtube_streaming_list
+                    )
 
-            _add_job_youtube_streaming(scheduler, job_id)
+            _add_job_youtube_streaming(scheduler, job_id, youtube_streaming_list)
             scheduler.add_listener(
                 _add_job_youtube_streaming_listener,
                 events.EVENT_JOB_EXECUTED | events.EVENT_JOB_ERROR,
@@ -56,7 +65,7 @@ def _main():
                 hour="1",
             )
         scheduler.start()
-        atexit.register(lambda: scheduler.shutdown())
+        atexit.register(scheduler.shutdown)
 
     except Exception as e:
         logging.exception(e)
@@ -81,24 +90,26 @@ def _parse_args(args=None):
     return parsed_args
 
 
-def _job_costco_arrival_noticing(force_notify):
+def _job_costco_arrival_noticing(costco_arrival_noticing_urls, force_notify=False):
     with make_web_driver(Config.WEB_DRIVER, Config.WEB_DRIVER_ARGS()) as web_driver:
         costco.arrival_noticing(
             Config.LINE_NOTIFY_ACCESS_TOKEN,
             web_driver,
-            Config.COSTCO_ARRIVAL_NOTICING_URLS,
+            costco_arrival_noticing_urls,
             force_notify,
         )
 
 
-def _job_youtube_streaming():
+def _job_youtube_streaming(youtube_streaming_list):
     with make_web_driver(Config.WEB_DRIVER, Config.WEB_DRIVER_ARGS()) as web_driver:
-        youtube.streaming(web_driver, Config.YOUTUBE_STREAMING_LIST)
+        youtube.streaming(web_driver, youtube_streaming_list)
 
 
-def _add_job_youtube_streaming(scheduler, job_id):
+def _add_job_youtube_streaming(scheduler, job_id, youtube_streaming_list):
     time.sleep(random.randrange(5, 20) / 10)
-    scheduler.add_job(func=_job_youtube_streaming, id=job_id)
+    scheduler.add_job(
+        func=lambda: _job_youtube_streaming(youtube_streaming_list), id=job_id
+    )
 
 
 if __name__ == "__main__":
