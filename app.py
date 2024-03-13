@@ -13,6 +13,8 @@ from selenium_tools import costco, line_notify, make_web_driver, youtube
 
 
 def _main():
+    scheduler = None
+
     try:
         parsed_args = _parse_args()
         logger = logging.getLogger()
@@ -24,13 +26,16 @@ def _main():
         if hasattr(Config, "COSTCO_ARRIVAL_NOTICING_URLS"):
             _job_costco_arrival_noticing(True)
             scheduler.add_job(
-                func=lambda: _job_costco_arrival_noticing(False), trigger="cron", minute="*/10"
+                func=lambda: _job_costco_arrival_noticing(False),
+                trigger="cron",
+                minute="*/10",
             )
         if hasattr(Config, "YOUTUBE_STREAMING_LIST"):
             job_id = "_job_youtube_streaming"
             streaming_count = 0
 
             def _add_job_youtube_streaming_listener(event):
+                nonlocal scheduler
                 nonlocal streaming_count
                 if event.job_id == job_id:
                     if not event.exception:
@@ -59,8 +64,9 @@ def _main():
 
     while True:
         try:
-            time.sleep(1)
+            input()
         except KeyboardInterrupt:
+            scheduler.pause()
             break
         except Exception as e:
             logging.exception(e)
@@ -68,7 +74,9 @@ def _main():
 
 def _parse_args(args=None):
     parser = argparse.ArgumentParser()
-    parser.add_argument("-ll", "--logging-level", type=str, default="info", help="logging level")
+    parser.add_argument(
+        "-ll", "--logging-level", type=str, default="info", help="logging level"
+    )
     parsed_args = parser.parse_args(args)
     return parsed_args
 
