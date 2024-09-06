@@ -47,7 +47,7 @@ def _search_and_play(web_driver, web_driver_wait, search_text, link_text, defaul
             web_driver,
             web_driver_wait,
             By.XPATH,
-            '//button[starts-with(@class, "videoAdUiSkipButton") or starts-with(@class, "ytp-ad-skip-button")]',
+            '//button[starts-with(@class, "videoAdUiSkipButton") or starts-with(@class, "ytp-ad-skip-button") or starts-with(@class, "ytp-skip-ad-button")]',
         ).click()
     except TimeoutException:
         logging.error("ad skip button not found")
