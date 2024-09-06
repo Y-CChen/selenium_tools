@@ -41,6 +41,7 @@ def _main():
         if youtube_streaming_list is not None:
             job_id = "_job_youtube_streaming"
             streaming_count = 0
+            streaming_count_notified = 0
 
             def _add_job_youtube_streaming_listener(event):
                 nonlocal streaming_count
@@ -56,11 +57,19 @@ def _main():
                 _add_job_youtube_streaming_listener,
                 events.EVENT_JOB_EXECUTED | events.EVENT_JOB_ERROR,
             )
-            scheduler.add_job(
-                func=lambda: line_notify.line_notify(
-                    "youtube streaming {} times".format(streaming_count),
+
+            def _job_line_notify_youtube_streaming_count():
+                nonlocal streaming_count_notified
+                line_notify.line_notify(
+                    "youtube streaming {} times, {} times today".format(
+                        streaming_count, streaming_count - streaming_count_notified
+                    ),
                     Config.LINE_NOTIFY_ACCESS_TOKEN,
-                ),
+                )
+                streaming_count_notified = streaming_count
+
+            scheduler.add_job(
+                func=_job_line_notify_youtube_streaming_count,
                 trigger="cron",
                 hour="1",
             )
