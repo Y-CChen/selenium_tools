@@ -15,19 +15,28 @@ def _random_sleep():
 
 
 def _seconds(text):
-    return sum(x * int(t if t else 0) for x, t in zip([1, 60, 3600], text.split(":")[::-1]))
+    return sum(
+        x * int(t if t else 0) for x, t in zip([1, 60, 3600], text.split(":")[::-1])
+    )
 
 
 def _find_element(web_driver, web_driver_wait, by, value):
-    web_driver_wait.until(expected_conditions.visibility_of_element_located((by, value)))
+    web_driver_wait.until(
+        expected_conditions.visibility_of_element_located((by, value))
+    )
     _random_sleep()
     return web_driver.find_element(by, value)
 
 
-def _search_and_play(web_driver, web_driver_wait, search_text, link_text, default_duration):
+def _search_and_play(
+    web_driver, web_driver_wait, search_text, link_text, default_duration
+):
     logging.info(search_text)
     el = _find_element(
-        web_driver, web_driver_wait, By.XPATH, '//input[@id="search" or @id="masthead-search-term"]'
+        web_driver,
+        web_driver_wait,
+        By.XPATH,
+        '//input[@id="search" or @id="masthead-search-term" or @name="search_query"]',
     )
     el.click()
     el.clear()
@@ -38,10 +47,13 @@ def _search_and_play(web_driver, web_driver_wait, search_text, link_text, defaul
     ).click().perform()
     try:
         _find_element(
-            web_driver, WebDriverWait(web_driver, 20), By.XPATH, '//div[@id="movie_player"]'
+            web_driver,
+            WebDriverWait(web_driver, 20),
+            By.XPATH,
+            '//div[@id="movie_player"]',
         )
-    except TimeoutException:
-        raise Exception("g-recaptcha")
+    except TimeoutException as exc:
+        raise TimeoutException("g-recaptcha") from exc
     try:
         _find_element(
             web_driver,
@@ -63,7 +75,9 @@ def _wait_streaming_finished(web_driver, web_driver_wait, default_duration):
         hover = (
             ActionChains(web_driver)
             .move_to_element(
-                _find_element(web_driver, web_driver_wait, By.XPATH, '//div[@id="movie_player"]')
+                _find_element(
+                    web_driver, web_driver_wait, By.XPATH, '//div[@id="movie_player"]'
+                )
             )
             .move_by_offset(5, 5)
             .move_by_offset(-5, -5)
@@ -79,31 +93,37 @@ def _wait_streaming_finished(web_driver, web_driver_wait, default_duration):
     except TimeoutException:
         default_current = "01:00"
     finally:
-        logging.info("{}/{}".format(current, duration))
         duration = duration if duration else default_duration
         current = current if current else default_current
+        logging.info("%s/%s", current, duration)
         time.sleep(_seconds(duration) - _seconds(current))
 
 
 def _clear_history(web_driver, web_driver_wait):
     try:
         _find_element(
-            web_driver, web_driver_wait, By.XPATH, '//yt-icon-button[@id="guide-button"]'
+            web_driver,
+            web_driver_wait,
+            By.XPATH,
+            '//yt-icon-button[@id="guide-button"]',
         ).click()
-        _find_element(web_driver, web_driver_wait, By.XPATH, '//a[@href="/feed/history"]').click()
+        _find_element(
+            web_driver, web_driver_wait, By.XPATH, '//a[@href="/feed/history"]'
+        ).click()
         _find_element(
             web_driver,
             web_driver_wait,
             By.XPATH,
             "/html/body/ytd-app/div[1]/ytd-page-manager/ytd-browse/ytd-two-column-browse-results-renderer/div/ytd-browse-feed-actions-renderer/div/ytd-button-renderer[1]",
         ).click()
-        _find_element(web_driver, web_driver_wait, By.XPATH, '//*[@id="confirm-button"]').click()
+        _find_element(
+            web_driver, web_driver_wait, By.XPATH, '//*[@id="confirm-button"]'
+        ).click()
     except TimeoutException:
         logging.error("clear history failed")
 
 
 def streaming(web_driver, streaming_list):
-    products = dict()
     web_driver_wait = WebDriverWait(web_driver, 60)
     web_driver.get("https://www.youtube.com/")
     random.shuffle(streaming_list)
